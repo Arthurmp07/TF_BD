@@ -115,6 +115,8 @@ INSERT INTO PROFESSOR (numeroProf, nome, idade, salario, departamento) VALUES (5
 
 ------------------------------------------------------------------------------------------------------------------------------------------
 
+4) -- Consultas requeridas (4.1 a 4.10) — apenas os comandos SQL + explicação curta
+
 
 
 
