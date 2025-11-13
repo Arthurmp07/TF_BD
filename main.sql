@@ -204,23 +204,9 @@ SELECT Aluno.Nome AS Matricula, SUM(Disciplina.CargaHoraria) AS carga_horária_t
     GROUP BY Aluno.MatriculaAluno, Aluno.Nome; 
 
 /* 
-Tivemos duas interpretações, então colocamos duas respostas possíveis para esta questão:
-
 4.10. Liste os semestres em que houve mais de 5 alunos matriculados em cada disciplina que teve 
 oferta naquele semestre. 
-*/ 
-SELECT t.semestre,
-       t.codigoDisc,
-       d.nome AS nome_disciplina,
-       COUNT(DISTINCT h.matriculaAluno) AS qtd_alunos
-FROM TURMA t
-JOIN DISCIPLINA d ON t.codigoDisc = d.codigoDisc
-JOIN HISTORICO h ON t.codigoDisc = h.codigoDisc AND t.semestre = h.semestre
-GROUP BY t.semestre, t.codigoDisc, d.nome
-HAVING COUNT(DISTINCT h.matriculaAluno) > 5
-ORDER BY t.semestre, t.codigoDisc;
-
--- 4.10b (se você apenas quiser os semestres distintos onde isso aconteceu)
+*/
 SELECT DISTINCT semestre
 FROM (
   SELECT t.semestre,
