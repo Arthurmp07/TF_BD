@@ -1,4 +1,4 @@
-1) --  Fazer o DER (DIAGRAMA DE ENTIDADE RELACIONAL)
+1) --  Fazer o DER (DIAGRAMA DE ENTIDADE RELACIONAL)(DUDA)
 2)
 DROP TABLE HISTORICO CASCADE CONSTRAINTS;
 DROP TABLE TURMA CASCADE CONSTRAINTS;
@@ -115,7 +115,7 @@ INSERT INTO PROFESSOR (numeroProf, nome, idade, salario, departamento) VALUES (5
 
 ------------------------------------------------------------------------------------------------------------------------------------------
 
-4) -- Consultas requeridas (4.1 a 4.10) — apenas os comandos SQL + explicação curta
+4) -- Consultas requeridas (4.1 a 4.10) — apenas os comandos SQL + explicação curta (Zelli e Eduardo)
 
 
 
