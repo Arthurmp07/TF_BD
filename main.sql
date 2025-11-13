@@ -116,9 +116,97 @@ INSERT INTO PROFESSOR (numeroProf, nome, idade, salario, departamento) VALUES (5
 ------------------------------------------------------------------------------------------------------------------------------------------
 
 4) -- Consultas requeridas (4.1 a 4.10) — apenas os comandos SQL + explicação curta (Zelli e Eduardo)
+  
+/* 
+4.1. Listar o nome dos professores que tenham idade menor do que 25 anos e que ministraram 
+disciplinas em 20252; 
+*/ 
+SELECT Professor.Nome  
+    FROM Professor INNER JOIN Turma ON Professor.NumeroProf = Turma.NumeroProf 
+    WHERE Professor.Idade < 25 
+    AND Turma.Semestre = 20252 ;
 
+/* 
+4.2. Listar o nome dos professores, em ordem alfabética, que ministraram a disciplina de código 10001 
+(para esta questão escolha algum código de disciplina cadastrado no seu banco de dados); 
+*/ 
+SELECT Professor.Nome  
+    FROM Professor INNER JOIN Turma ON Professor.NumeroProf = Turma.NumeroProf 
+    WHERE Turma.CodigoDisc = 10001 
+    ORDER BY Professor.Nome; 
 
+/* 
+4.3. Qual a quantidade de disciplinas, com carga horária maior do que 60 horas, que cada professor 
+com idade maior do que 65 anos já ministrou. A saída para esta questão deve ser o nome do 
+professor e a quantidade de disciplinas ministradas. 
+*/ 
+SELECT Professor.Nome, COUNT(*) AS Qnt_Disciplinas 
+    FROM Professor INNER JOIN Turma ON Professor.NumeroProf = Turma.NumeroProf 
+                   INNER JOIN Disciplina ON Turma.CodigoDisc = Disciplina.CodigoDisc 
+    WHERE Disciplina.CargaHoraria > 60 
+    AND Professor.Idade > 65 
+    GROUP BY Professor.Nome; 
 
+/* 
+4.4. Liste o número de matrícula e nome dos alunos, juntamente com o nome das disciplinas cursadas 
+por ele e a nota que obteve em cada disciplina, mas somente para disciplinas em que o aluno foi 
+aprovado com nota maior ou igual a 7. 
+*/ 
+SELECT Aluno.MatriculaAluno AS Matrícula, Aluno.Nome, Disciplina.Nome AS Disciplina, Historico.Nota 
+    FROM Aluno INNER JOIN Historico ON Aluno.MatriculaAluno = Historico.MatriculaAluno 
+               INNER JOIN Disciplina ON Historico.CodigoDisc = Disciplina.CodigoDisc 
+    WHERE Historico.Nota >= 7; 
+
+/* 
+4.5. Liste o número de matrícula dos alunos e a média geral de suas notas, ou seja, a média deverá 
+considerar todas as notas, mesmo aquelas de disciplinas em que ele foi reprovado, ou seja, onde 
+teve nota inferior a 7. 
+*/ 
+SELECT Aluno.MatriculaAluno AS Matrícula, AVG(Historico.Nota) AS Média_Notas 
+    FROM Aluno INNER JOIN Historico ON Aluno.MatriculaAluno = Historico.MatriculaAluno 
+    GROUP BY Aluno.MatriculaAluno; 
+
+/* 
+4.6. Liste todas as disciplinas cadastradas no banco de dados e a quantidade de alunos matriculados 
+nessas disciplinas em 20252. Para esta questão, garanta que algumas disciplinas estejam 
+cadastradas no banco de dados, mas sem alunos matriculados em 20252. 
+*/ 
+SELECT Disciplina.CodigoDisc, Disciplina.Nome AS Nome_Disc, COUNT(*) AS Alunos_20252 
+    FROM Disciplina INNER JOIN Historico ON Disciplina.CodigoDisc = Historico.CodigoDisc 
+                    INNER JOIN Aluno ON Aluno.MatriculaAluno = Historico.MatriculaAluno 
+    WHERE Aluno.Status = 'matriculado' 
+    AND Historico.Semestre = 20252 
+    GROUP BY Disciplina.CodigoDisc, Disciplina.Nome; 
+
+/* 
+4.7. Liste o nome das disciplinas que não tiveram alunos matriculados em 20252. 
+*/ 
+SELECT Disciplina.Nome AS Nome_Disc FROM Disciplina  
+    WHERE Disciplina.CodigoDisc NOT IN (SELECT Historico.CodigoDisc FROM Historico WHERE Historico.Semestre = 20252) 
+    GROUP BY Disciplina.CodigoDisc, Disciplina.Nome; 
+
+/* 
+4.8. Liste o nome dos professores que ministraram todas as disciplinas cadastradas neste banco de 
+dados, não importando o semestre em que ministraram. 
+*/ 
+SELECT Professor.Nome 
+    FROM Professor INNER JOIN Turma ON Professor.NumeroProf = Turma.NumeroProf 
+    GROUP BY Professor.NumeroProf, Professor.Nome 
+    HAVING COUNT(DISTINCT Turma.CodigoDisc) = (SELECT COUNT(DISTINCT Historico.CodigoDisc) FROM Historico); 
+
+/* 
+4.9. Liste o total de carga já cursada por cada aluno. Liste o nome do aluno e o total de carga horária 
+cursada pelo aluno. 
+*/ 
+SELECT Aluno.Nome AS Matricula, SUM(Disciplina.CargaHoraria) AS carga_horária_total 
+    FROM Aluno INNER JOIN Historico ON Aluno.MatriculaAluno = Historico.MatriculaAluno 
+               INNER JOIN Disciplina ON Historico.CodigoDisc = Disciplina.CodigoDisc 
+    GROUP BY Aluno.MatriculaAluno, Aluno.Nome; 
+
+/* 
+4.10. Liste os semestres em que houve mais de 5 alunos matriculados em cada disciplina que teve 
+oferta naquele semestre. 
+*/ 
 
 
 
